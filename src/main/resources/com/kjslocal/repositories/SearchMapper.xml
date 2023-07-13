@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mapper namespace="com.kjslocal.repositories.SearchMapper">
+
+	<resultMap id="allResult"
+		type="com.legalsight.speech.dto.SpeechResponseItemDto">
+		<id column="IP_ID" property="speechId" />
+		<result column="IP_ADDRESS" property="speechContent" />
+		<result column="ENVIRONMENT" property="author" />
+		<result column="APPLICATION" property="subject" />
+		<result column="CLIENT_NAME" property="createdAt" />
+	</resultMap>
+
+	<select id="viewAll" resultMap="allResult">
+		SELECT * FROM SPEECH
+	</select>
+
+	<resultMap id="searchResult"
+		type="com.kjslocal.entities.ClientEntity">
+		<id column="CLIENT_ID" property="id" />
+		<result column="CLIENT_NAME" property="name" />
+		<result column="ENVIRONMENT" property="env" />
+		<result column="APPLICATION" property="app" />
+	</resultMap>
+
+	<select id="getClientId" resultMap="getClientIdResult">
+		SELECT * FROM CLIENT_TBL
+		WHERE APPLICATION LIKE CONCAT('%',CONCAT(#{request.application},'%')
+		AND ENVIRONMENT LIKE CONCAT('%', CONCAT(#{request.environment},'%')
+		<if test="request.clientName != null or request.clientName != ''">
+			AND CLIENT_NAME LIKE CONCAT('%',CONCAT(#{request.clientName},'%'))
+		</if>
+	</select>
+
+</mapper>
